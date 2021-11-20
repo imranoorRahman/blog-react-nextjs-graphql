@@ -25,14 +25,17 @@ const PostWidget = ({ categories, slug }) => {
         {slug ? "Related Posts" : "Recent Posts"}
       </h3>
       {relatedPosts.map((post) => (
-        <div className="flex items-center w-full mb-4" key={post.title}>
+        <div
+          className="flex items-center w-full mb-4 object-cover"
+          key={post.title}
+        >
           <div className="w-16 flex-none">
             <img
               src={post.featuredImage.url}
               alt={post.title}
               height="60px"
               width="60px"
-              className="align-middle rounded-full"
+              className="align-middle rounded-full object-cover"
             />
           </div>
           <div className="flex-grow ml-4">

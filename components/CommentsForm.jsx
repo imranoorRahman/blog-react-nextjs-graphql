@@ -13,6 +13,7 @@ const CommentsForm = ({ slug }) => {
   const storeDataEl = useRef(null);
 
   useEffect(() => {
+    setLocalStorage(window.localStorage);
     nameEl.current.value = window.localStorage.getItem("name");
     emailEl.current.value = window.localStorage.getItem("email");
   }, []);
@@ -33,11 +34,11 @@ const CommentsForm = ({ slug }) => {
     const commentObj = { name, email, comment, slug };
 
     if (storeData) {
-      window.localStorage.setItem("name", name);
-      window.localStorage.setItem("email", email);
+      localStorage.setItem("name", name);
+      localStorage.setItem("email", email);
     } else {
-      window.localStorage.removeItem("name", name);
-      window.localStorage.removeItem("email", email);
+      localStorage.removeItem("name", name);
+      localStorage.removeItem("email", email);
     }
 
     submitComment(commentObj).then((res) => {

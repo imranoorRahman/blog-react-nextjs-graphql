@@ -4,10 +4,35 @@ const CommentsForm = ({ slug }) => {
   const [error, setError] = useState(false);
   const [localStorage, setLocalStorage] = useState(null);
   const [showSuccessMessage, setShowSuccessMessage] = useState(false);
+
   const commentEl = useRef(null);
   const nameEl = useRef(null);
   const emailEl = useRef(null);
   const storeDataEl = useRef(null);
+
+  const handleCommentSubmission = () => {
+    setError(false);
+
+    const { value: comment } = commentEl.current;
+    const { value: name } = nameEl.current;
+    const { value: email } = emailEl.current;
+    const { checked: storeData } = storeDataEl.current;
+
+    if (!comment || !name || !email) {
+      setError(true);
+      return;
+    }
+
+    const commentObj = { name, email, comment, slug };
+
+    if (storeData) {
+      localoStorage.setItem("name", name);
+      localoStorage.setItem("email", email);
+    } else {
+      localoStorage.removeItem("name", name);
+      localoStorage.removeItem("email", email);
+    }
+  };
 
   return (
     <div className="bg-white shadow-lg rounded-lg p-8 pb-12 mb-8">
@@ -36,11 +61,39 @@ const CommentsForm = ({ slug }) => {
           name="email"
         />
       </div>
+      <div className="grid grid-cols-1 gap-4 mb-4">
+        <div>
+          <input
+            ref={storeDataEl}
+            type="checkbox"
+            id="storeData"
+            name="storeData"
+            value="true"
+          />
+          <label
+            className="text-gray-500 cursor-pointer ml-2"
+            htmlFor="storeData"
+          >
+            Remember my name and email for my future comments.
+          </label>
+        </div>
+      </div>
       {error && (
         <p className="text-xs text-red-500">All fields are required!</p>
       )}
       <div className="mt-8">
-        <button type="button"></button>
+        <button
+          type="button"
+          className="transition duration-500 ease hover:bg-indigo-900 inline-block bg-pink-600 text-lg rounded-full text-white px-8 py-3 cursor-pointer"
+          onClick={handleCommentSubmission}
+        >
+          Post Comment
+        </button>
+        {showSuccessMessage && (
+          <span className="text-xl float-right font-semibold mt-3 text-green-500">
+            Comment submitted for review!
+          </span>
+        )}
       </div>
     </div>
   );

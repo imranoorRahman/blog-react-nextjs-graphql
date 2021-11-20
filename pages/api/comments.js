@@ -23,6 +23,7 @@ export default async function comments(req, res){
   //   comment: req.body.comment,
   //   slug: req.body.slug,
   // });
-
+  // console.log(">comments.js : END<LOOK @ SLUG :: ");
+  // console.log(slug);
   return res.status(200).send(result);
 }

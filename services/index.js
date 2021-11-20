@@ -2,6 +2,21 @@ import {request, gql} from 'graphql-request';
 
 const graphqlAPI = process.env.NEXT_PUBLIC_GRAPHCMS_ENDPOINT;
 
+export const getCategories = async () => {
+  const query = gql`
+    query GetGategories {
+        categories {
+          name
+          slug
+        }
+    }
+  `;
+
+  const result = await request(graphqlAPI, query);
+
+  return result.categories;
+};
+
 export const getPosts = async () => {
   const query = gql`
     query MyQuery {
@@ -38,31 +53,6 @@ export const getPosts = async () => {
 
   return result.postsConnection.edges;
 };
-
-export const getCategories = async () => {
-  const query = gql`
-    query GetGategories {
-        categories {
-          name
-          slug
-        }
-    }
-  `;
-
-  const result = await request(graphqlAPI, query);
-
-  return result.categories;
-};
-
-export const submitComment = async (obj) => {
-  const result = await fetch('/api/comments', {
-    method: 'POST',
-    headers: {'Content-Type': 'application/json'},
-    body: JSON.stringify(obj),
-  });
-
-  return result.json();
-}
 
 export const getPostDetails = async (slug) => {
   const query = gql`
@@ -138,4 +128,33 @@ export const getRecentPosts = async () => {
   const result = await request(graphqlAPI, query);
 
   return result.posts;
+};
+
+export const submitComment = async (obj) => {
+  const result = await fetch('/api/comments', {
+    method: 'POST',
+    headers: {'Content-Type': 'application/json'},
+    body: JSON.stringify(obj),
+  });
+
+  return result.json();
+}
+
+export const getComments = async (slug) => {
+  // console.log(">services/index.js START: getComments<LOOK @ SLUG :: ");
+  // console.log(slug);
+  const query = gql`
+    query GetComments($slug:String!) {
+        comments(where: {post: {slug:$slug}}) {
+          name
+          createdAt
+          comment
+        }
+    }
+  `;
+
+  const result = await request(graphqlAPI, query, {slug});
+  // console.log(">services/index.js END: getComments<LOOK @ SLUG :: ");
+  // console.log(slug);
+  return result.comments;
 };
